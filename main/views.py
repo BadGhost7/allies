@@ -10,3 +10,5 @@ class IndexView (ListView):
     ordering = ["-created_at"]
     template_name = "index.html"
     context_object_name = "posts"
+
+template_name = 'users/templates/users/index.html'
