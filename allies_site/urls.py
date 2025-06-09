@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from main.views import IndexView
 from users import views
+from django.contrib.auth import views as auth_views  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("main.urls")),
     path('register/', views.SignUpView.as_view(), name='register'),
-   
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     
 ]
