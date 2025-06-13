@@ -75,6 +75,7 @@ body {
     display: inline-block;
 }
 
+
 .auth-btn:hover {
     background-color: var(--accent-hover);
     transform: translateY(-2px);
@@ -137,3 +138,96 @@ body {
         justify-content: space-between;
     }
 }
+
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #1e1e1e;
+    border-radius: 8px;
+}
+
+.profile-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.avatar-section {
+    flex: 0 0 150px;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #bb86fc;
+}
+
+.default-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bb86fc;
+    font-size: 3rem;
+}
+
+.details-section {
+    flex: 1;
+}
+
+.details-section p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+
+
+
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-profile, .btn-logout,
+.btn-login, .btn-register {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+/* Стили для авторизованных */
+.btn-profile {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-logout {
+    background: #f44336;
+    color: white;
+}
+
+/* Стили для гостей */
+.btn-login {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-register {
+    background: #FF9800;
+    color: white;
+}
+
+/* Эффекты при наведении */
+.btn-profile:hover { background: #45a049; }
+.btn-logout:hover { background: #d32f2f; }
+.btn-login:hover { background: #0b7dda; }
+.btn-register:hover { background: #e68a00; }

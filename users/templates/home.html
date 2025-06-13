@@ -1,0 +1,26 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Мой профиль</h2>
+    
+    <div class="profile-info">
+        <div class="avatar-section">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Аватар" class="profile-avatar">
+            {% else %}
+                <div class="default-avatar"></div>
+            {% endif %}
+        </div>
+        
+        <div class="details-section">
+            <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Discord:</strong> {{ user.profile.discord|default:"Не указан" }}</p>
+            <p><strong>Steam:</strong> {{ user.profile.steam_profile|default:"Не указан" }}</p>
+        </div>
+    </div>
+
+    <a href="{% url 'profile_edit' %}" class="auth-btn">Редактировать профиль</a>
+</div>
+{% endblock %}

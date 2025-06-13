@@ -5,8 +5,9 @@
     <h2 class="auth-title">Вход в аккаунт</h2>
     
     <form method="post" class="auth-form">
+    <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
-        
+        {{ form.as_p }}
         <div class="form-group">
             <label for="id_username">Email или логин:</label>
             {{ form.username }}
@@ -25,4 +26,4 @@
         </div>
     </form>
 </div>
-{% endblock %}
+{% endblock %}hBgLYGU1JU3L
