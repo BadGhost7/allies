@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileEditForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
+from .forms import ProfileForm
 class CustomLoginView(LoginView):
     template_name = 'users/registration/login.html'  
     redirect_authenticated_user = True 
@@ -48,3 +48,11 @@ def profile_edit(request):
         'users/profile_edit.html',
         {'profile_form': profile_form}
     )
+
+class ProfileView(LoginRequiredMixin, UpdateView):
+    template_name = 'profile.html'
+    form_class = ProfileForm
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user

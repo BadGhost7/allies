@@ -20,6 +20,8 @@ urlpatterns = [
     path('profile/edit/', profile_edit, name='profile_edit'),
     path('profile/', views.profile, name='profile'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     
-
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
