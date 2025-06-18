@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Профиль пользователя 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -12,7 +12,7 @@ class Profile(models.Model):
     def __str__(self):
         return f"Профиль {self.user.username}"
 
-# Игра
+
 class Game(models.Model):
     name = models.CharField(max_length=100)
     genre = models.CharField(max_length=50)
@@ -22,7 +22,7 @@ class Game(models.Model):
     def __str__(self):
         return self.name
 
-# Анкета для поиска команды
+
 class Anketa(models.Model):
     RANK_CHOICES = [
         ('beginner', 'Новичок'),
@@ -41,4 +41,4 @@ class Anketa(models.Model):
 
     def __str__(self):
         return f"Анкета {self.user.username} ({self.game.name})"
-text = models.TextField(null=True, blank=True)  # Разрешить NULL значения
+text = models.TextField(null=True, blank=True)  
