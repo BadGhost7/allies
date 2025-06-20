@@ -1,15 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Главная страница</h1>
-
-{% if user.is_authenticated %}
+<div class="container">
+    {% if user.is_authenticated %}
+     
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Моя анкета</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Опубликовать</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Мой профиль</h5>
+                        <p class="card-text">{{ user.username }}</p>
+                        <a href="{% url 'profile' %}" class="btn btn-info">Редактировать</a>
+                        <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <h2>Поиск союзников</h2>
+        <div class="row">
+            {% for profile in public_profiles %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ profile.user.username }}</h5>
+                            <p class="card-text">{{ profile.bio|truncatechars:100 }}</p>
+                            <a href="{% url 'users:view_profile' profile.id %}" class="btn btn-primary">Посмотреть анкету</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
     
-    <a href="{% url 'profile' %}" class="btn btn-primary">Профиль</a>
-    <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
-{% else %}
-  
-    <a href="{% url 'login' %}" class="btn btn-success">Войти</a>
-    <a href="{% url 'register' %}" class="btn btn-info">Регистрация</a>
-{% endif %}
+        <div class="jumbotron">
+            <h1 class="display-4">Добро пожаловать!</h1>
+            <p class="lead">Войдите или зарегистрируйтесь, чтобы найти союзников</p>
+            <div class="mt-4">
+                <a href="{% url 'login' %}" class="btn btn-success btn-lg mr-2">Войти</a>
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Регистрация</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

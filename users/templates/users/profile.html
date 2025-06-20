@@ -1,13 +1,23 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="profile-container">
-    <h1>Добро пожаловать, {{ user.username }}!</h1>
-    <p>Email: {{ user.email }}</p>
-    
-    <div class="profile-actions">
-        <a href="#" class="btn-action">Настройки</a>
-        <a href="{% url 'logout' %}" class="btn-action">Выйти</a>
+<div class="container">
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Анкета {{ profile.user.username }}</h2>
+        </div>
+        <div class="card-body">
+            <h5>О себе:</h5>
+            <p>{{ profile.bio }}</p>
+            
+            <h5>Игровые предпочтения:</h5>
+            <p>{{ profile.game_preferences }}</p>
+            
+            <h5>Уровень навыков:</h5>
+            <p>{{ profile.skill_level }}</p>
+            
+            <a href="{% url 'home' %}" class="btn btn-primary">Назад к поиску</a>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from .models import Profile
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
-
+from .models import UserProfile
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -12,7 +12,10 @@ class ProfileEditForm(forms.ModelForm):
             'steam_profile': forms.URLInput(attrs={'placeholder': 'https://steamcommunity.com/id/username'}),
         }
 
-class ProfileForm(UserChangeForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = get_user_model()
-        fields = ['username', 'email', 'first_name', 'last_name']
+        model = UserProfile
+        fields = ['bio', 'game_preferences', 'skill_level', 'is_public']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4}),
+        }

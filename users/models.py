@@ -52,3 +52,18 @@ class Anketa(models.Model):
     def __str__(self):
         return f"Анкета {self.user.username} ({self.game.name})"
 text = models.TextField(null=True, blank=True)  
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField('О себе', blank=True)
+    game_preferences = models.CharField('Игровые предпочтения', max_length=255, blank=True)
+    skill_level = models.CharField('Уровень навыков', max_length=50, blank=True)
+    is_public = models.BooleanField('Публичная анкета', default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def _str_(self):
+        return f'Анкета {self.user.username}'
+
+    class Meta:
+        verbose_name = 'Анкета пользователя'
+        verbose_name_plural = 'Анкеты пользователей'

@@ -13,6 +13,16 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from django.views.generic import UpdateView
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import UserProfile
+from .forms import ProfileForm
+
+from django.shortcuts import render, get_object_or_404
+
+def view_profile(request, profile_id):
+    profile = get_object_or_404(UserProfile, id=profile_id, is_public=True)
+    return render(request, 'users/view_profile.html', {'profile': profile})
+
 class CustomLoginView(LoginView):
     template_name = 'users/registration/login.html'  
     redirect_authenticated_user = True 
@@ -30,6 +40,20 @@ def profile(request):
 
 class HomeView(TemplateView):
     template_name = 'users/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+            context['form'] = ProfileForm(instance=profile)
+            context['public_profiles'] = UserProfile.objects.filter(is_public=True).exclude(user=self.request.user)
+        return context
+    def post(self, request, *args, **kwargs):
+        profile = UserProfile.objects.get(user=request.user)
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+        return self.get(request, *args, **kwargs)
    
 
 @login_required
