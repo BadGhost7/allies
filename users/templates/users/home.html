@@ -18,8 +18,11 @@
                     <div class="card-body">
                         <h5 class="card-title">Мой профиль</h5>
                         <p class="card-text">{{ user.username }}</p>
-                        <a href="{% url 'profile' %}" class="btn btn-info">Редактировать</a>
-                        <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
+                        <a href="{% url 'profile_edit' %}" class="btn btn-info">Редактировать</a>
+                        <form method="post" action="{% url 'home' %}">
+                    {% csrf_token %}                   
+                    <button type="submit" class="btn btn-primary">Выйти!</button>
+                </form>
                     </div>
                 </div>
             </div>
@@ -35,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ profile.user.username }}</h5>
                             <p class="card-text">{{ profile.bio|truncatechars:100 }}</p>
-                            <a href="{% url 'users:view_profile' profile.id %}" class="btn btn-primary">Посмотреть анкету</a>
+                            <a href="{% url 'home' %}" class="btn btn-primary">Посмотреть анкету</a>
                         </div>
                     </div>
                 </div>

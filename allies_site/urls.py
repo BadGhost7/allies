@@ -17,7 +17,7 @@ urlpatterns = [
     path('', include("main.urls")),
     path('register/', views.SignUpView.as_view(), name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/registration/login.html'), name='login'),
-    path('home/', HomeView.as_view(), name='home'),
+    
     path('profile/edit/', profile_edit, name='profile_edit'),
     path('profile/', views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(
@@ -27,5 +27,5 @@ urlpatterns = [
 ), name='login'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
-    
+    path('user/', include("users.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
