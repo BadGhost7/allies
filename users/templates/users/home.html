@@ -38,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ profile.user.username }}</h5>
                             <p class="card-text">{{ profile.bio|truncatechars:100 }}</p>
-                            <a href="{% url 'home' %}" class="btn btn-primary">Посмотреть анкету</a>
+                            <a href="{% url 'users:profile_detail' profile.id %}" class="btn btn-primary">Посмотреть анкету</a>                 
                         </div>
                     </div>
                 </div>

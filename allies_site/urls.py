@@ -25,7 +25,10 @@ urlpatterns = [
     redirect_authenticated_user=True,
     success_url='home'  
 ), name='login'),
+    path('users/', include('users.urls')),
+    path('home/', HomeView.as_view(), name='home'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
-    path('user/', include("users.urls")),
+    path('users', include('users.urls')),
+   
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

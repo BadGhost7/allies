@@ -19,9 +19,13 @@ from .forms import ProfileForm
 
 from django.shortcuts import render, get_object_or_404
 
-def view_profile(request, profile_id):
-    profile = get_object_or_404(UserProfile, id=profile_id, is_public=True)
-    return render(request, 'users/view_profile.html', {'profile': profile})
+def show_profile(request, profile_id):
+    """Функция для отображения профиля, как странички героя в Dota"""
+    # Ищем профиль в базе. Если нет — покажет 404 (как роспись "герой мертв")
+    profile = get_object_or_404(UserProfile, id=profile_id)
+    
+    # Рендерим HTML-шаблон и передаём туда данные профиля (как отправка данных в чат)
+    return render(request, 'users/profile.html', {'profile': profile})
 
 class CustomLoginView(LoginView):
     template_name = 'users/registration/login.html'  
@@ -41,19 +45,26 @@ def profile(request):
 
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'users/home.html'
-
-
-
-
+    
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        return super().get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            profile, created = UserProfile.objects.get_or_create(user=self.request.user)
-            context['form'] = ProfileForm(instance=profile)
-            context['public_profiles'] = UserProfile.objects.filter(is_public=True).exclude(user=self.request.user)
+        context['public_profiles'] = UserProfile.objects.filter(
+            is_public=True
+        ).exclude(
+            user=self.request.user
+        )
         return context
+
+
+
+   
     def post(self, request, *args, **kwargs):
         profile = UserProfile.objects.get(user=request.user)
         form = ProfileForm(request.POST, instance=profile)
@@ -89,3 +100,20 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+
+# Стало (исправленная версия):
+def public_profiles_view(request):
+    # Фильтруем ТОЛЬКО публичные анкеты (is_public=True)
+    profiles = UserProfile.objects.filter(is_public=True).exclude(user=request.user)
+    return render(request, 'template.html', {'profiles': profiles})
+
+def profiles_list(request):
+    """Список всех публичных анкет"""
+    profiles = UserProfile.objects.filter(is_public=True).exclude(user=request.user)
+    return render(request, 'users/profiles_list.html', {'profiles': profiles})
+
+def profile_detail(request, pk):
+    """Детальный просмотр анкеты"""
+    profile = get_object_or_404(UserProfile, pk=pk, is_public=True)
+    return render(request, 'users/profile_detail.html', {'profile': profile})

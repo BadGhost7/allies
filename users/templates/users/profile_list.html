@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Все публичные анкеты</h2>
+    
+    {% if profiles %}
+    <div class="row">
+        {% for profile in profiles %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ profile.user.username }}</h5>
+                    <p class="card-text">
+                        {{ profile.bio|truncatechars:100 }}
+                    </p>
+                    <a href="{% url 'profile_detail' profile.id %}" class="btn btn-primary">
+                        Посмотреть анкету
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Пока нет публичных анкет. Будьте первым!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

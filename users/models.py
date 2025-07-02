@@ -9,6 +9,9 @@ class Profile(models.Model):
     discord = models.CharField(max_length=50, blank=True)
     steam_profile = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Профиль {self.user.username}"
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -61,7 +64,7 @@ class UserProfile(models.Model):
     is_public = models.BooleanField('Публичная анкета', default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return f'Анкета {self.user.username}'
 
     class Meta:

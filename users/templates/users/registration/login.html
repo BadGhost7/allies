@@ -14,7 +14,8 @@
             {{ form.password }}
         </div>
         
-        <button type="submit" class="auth-btn">Войти</button>
+        <input type="hidden" name="next" value="/home/">
+        <button type="submit">Войти</button>
         
         <div class="auth-links">
             <a href="{% url 'register' %}">Регистрация</a>
