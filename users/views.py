@@ -47,29 +47,33 @@ def profile(request):
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'users/home.html'
-    
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('login')
-        return super().get(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Ваш профиль и форма
+        user_profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        context['form'] = ProfileForm(instance=user_profile)
+        
+        # Анкеты других пользователей (ВАЖНО!)
         context['public_profiles'] = UserProfile.objects.filter(
             is_public=True
         ).exclude(
             user=self.request.user
-        )
+        ).select_related('user')  # Оптимизация запроса
+        
         return context
-
-
-
-   
+    
     def post(self, request, *args, **kwargs):
+        # Обработка отправки формы
         profile = UserProfile.objects.get(user=request.user)
         form = ProfileForm(request.POST, instance=profile)
+        
         if form.is_valid():
             form.save()
+            return redirect('home')  # Редирект после сохранения
+        
+        # Если форма невалидна, покажем снова
         return self.get(request, *args, **kwargs)
    
 
