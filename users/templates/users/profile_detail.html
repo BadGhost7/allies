@@ -1,22 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header">
-            <h2>Анкета {{ profile.user.username }}</h2>
-        </div>
-        <div class="card-body">
-            <h5>О себе:</h5>
-            <p>{{ profile.bio|linebreaks }}</p>
-            
-            <h5>Игровые предпочтения:</h5>
-            <p>{{ profile.game_preferences }}</p>
-            
-            <a href="{% url 'home' %}" class="btn btn-secondary">
-                На главную
-            </a>
-        </div>
+<div class="profile-container">
+    <h2>Анкета {{ profile.user.username }}</h2>
+    
+    {% if profile.avatar %}
+    <div class="avatar">
+        <img src="{{ profile.avatar.url }}" width="150">
+    </div>
+    {% endif %}
+    
+    <div class="profile-section">
+        <h3>О себе:</h3>
+        <p>{{ profile.user.userprofile.bio|linebreaks }}</p>
+    </div>
+    
+    <div class="profile-section">
+        <h3>Игровые предпочтения:</h3>
+        <p>{{ profile.user.userprofile.game_preferences }}</p>
+    </div>
+    
+    <div class="profile-section">
+        <h3>Уровень навыков:</h3>
+        <p>{{ profile.user.userprofile.skill_level }}</p>
+    </div>
+    
+    <div class="profile-section">
+        <h3>Discord:</h3>
+        <p>{{ profile.discord }}</p>
+    </div>
+    
+    <div class="profile-section">
+        <h3>Steam профиль:</h3>
+        {% if profile.steam_profile %}
+        <a href="{{ profile.steam_profile }}">Перейти</a>
+        {% else %}
+        <p>Не указан</p>
+        {% endif %}
+    </div>
+    
+    <div class="back-link">
+        <a href="{% url 'home' %}">На главную</a>
     </div>
 </div>
 {% endblock %}

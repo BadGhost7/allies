@@ -11,6 +11,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Опубликовать</button>
+                    <button type="submit" name="save_profile" class="btn btn-primary">Сохранить анкету</button>
                 </form>
             </div>
             <div class="col-md-4">
@@ -19,10 +20,10 @@
                         <h5 class="card-title">Мой профиль</h5>
                         <p class="card-text">{{ user.username }}</p>
                         <a href="{% url 'profile_edit' %}" class="btn btn-info">Редактировать</a>
-                        <form method="post" action="{% url 'home' %}">
-                    {% csrf_token %}                   
-                    <button type="submit" class="btn btn-primary">Выйти!</button>
-                </form>
+                        
+
+
+                        <a href="{% url 'logout' %}" class="btn btn-danger" onclick="return confirm('Выйти?')">Выйти</a>
                     </div>
                 </div>
             </div>

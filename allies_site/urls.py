@@ -11,7 +11,7 @@ from users.views import HomeView, profile_edit
 from django.contrib.auth.views import LogoutView
 from django.views.generic import TemplateView
 from users.views import ProfileView
-
+from users.views import custom_logout
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("main.urls")),
@@ -28,7 +28,8 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('home/', HomeView.as_view(), name='home'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('logout/', custom_logout, name='logout'),
     path('users', include('users.urls')),
+    path('', HomeView.as_view(), name='root'),
    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

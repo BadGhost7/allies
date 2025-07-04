@@ -1,10 +1,9 @@
-from django.shortcuts import render
+from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView
 from django.views.generic import CreateView
-from django.shortcuts import render
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileEditForm
@@ -12,12 +11,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from django.views.generic import UpdateView
-from django.views.generic import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
+
 from .models import UserProfile
-from .forms import ProfileForm
+
 
 from django.shortcuts import render, get_object_or_404
+def custom_logout(request):
+    logout(request)
+    return redirect('/')  # Жёсткий редирект на главную
+
 
 def show_profile(request, profile_id):
     """Функция для отображения профиля, как странички героя в Dota"""
@@ -51,30 +54,26 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Ваш профиль и форма
-        user_profile, created = UserProfile.objects.get_or_create(user=self.request.user)
-        context['form'] = ProfileForm(instance=user_profile)
+        # Ваш профиль (создаём, если не существует)
+        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        context['form'] = ProfileForm(instance=profile)
         
-        # Анкеты других пользователей (ВАЖНО!)
+        # Анкеты других пользователей (исправленный запрос)
         context['public_profiles'] = UserProfile.objects.filter(
             is_public=True
         ).exclude(
             user=self.request.user
-        ).select_related('user')  # Оптимизация запроса
-        
+        ).select_related('user')  # Оптимизация
         return context
     
     def post(self, request, *args, **kwargs):
-        # Обработка отправки формы
-        profile = UserProfile.objects.get(user=request.user)
-        form = ProfileForm(request.POST, instance=profile)
-        
-        if form.is_valid():
-            form.save()
-            return redirect('home')  # Редирект после сохранения
-        
-        # Если форма невалидна, покажем снова
-        return self.get(request, *args, **kwargs)
+        # Обрабатываем только сохранение анкеты
+        if 'save_profile' in request.POST:  # Добавьте name="save_profile" к кнопке сохранения
+            profile = UserProfile.objects.get(user=request.user)
+            form = ProfileForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+        return redirect('home')
    
 
 @login_required
@@ -117,7 +116,8 @@ def profiles_list(request):
     profiles = UserProfile.objects.filter(is_public=True).exclude(user=request.user)
     return render(request, 'users/profiles_list.html', {'profiles': profiles})
 
-def profile_detail(request, pk):
-    """Детальный просмотр анкеты"""
-    profile = get_object_or_404(UserProfile, pk=pk, is_public=True)
+def profile_detail(request, profile_id):
+    real_id = profile_id + 1  # Добавляем 1 к полученному ID
+    profile = get_object_or_404(Profile, pk=real_id)
+    # Дальнейшая логика
     return render(request, 'users/profile_detail.html', {'profile': profile})

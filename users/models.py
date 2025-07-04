@@ -10,6 +10,7 @@ class Profile(models.Model):
     steam_profile = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
+    
     def __str__(self):
         return f"Профиль {self.user.username}"
 @receiver(post_save, sender=User)

@@ -17,5 +17,6 @@ class ProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['bio', 'game_preferences', 'skill_level', 'is_public']
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 4}),
+            'bio': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'is_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
